@@ -31,7 +31,7 @@ def _work_much_cpu(*args,**kwargs):
     c = 0
     x = 1
     y = 1
-    while c < 50000:
+    while c < 500000:
         c += 1
         x += x
         y += y
@@ -150,6 +150,7 @@ class MyTestCase(unittest.TestCase):
         t = Profile()
 
         for fn in (_work_much_cpu,_work_much_io,_work_much_net):
+            _threading_thread_framework.__name__ = fn.__name__
             t.execute(_threading_thread_framework,fn, ())
         print('')
         print('')
@@ -158,6 +159,7 @@ class MyTestCase(unittest.TestCase):
         t = Profile()
 
         for fn in (_work_much_cpu,_work_much_io,_work_much_net):
+            _multiprocessing_process_framework.__name__= fn.__name__
             t.execute(_multiprocessing_process_framework,fn, ())
 
         print('')
@@ -166,6 +168,7 @@ class MyTestCase(unittest.TestCase):
     def test_concurrent_futures_threadpool(self):
         t = Profile()
         for fn in (_work_much_cpu,_work_much_io,_work_much_net):
+            _futures_threadpool_framework.__name__ = fn.__name__
             t.execute(_futures_threadpool_framework,fn, range(g_task_count))
         print('')
         print('')
@@ -173,6 +176,7 @@ class MyTestCase(unittest.TestCase):
     def test_multiprocessing_threadpool(self):
         t = Profile()
         for fn in (_work_much_cpu, _work_much_io, _work_much_net):
+            _multiprocessing_threadpool_framework.__name__ = fn.__name__
             t.execute(_multiprocessing_threadpool_framework, fn, range(g_task_count))
 
         print('')
