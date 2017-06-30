@@ -7,4 +7,5 @@ python:
 install: "pip install -r requirements.txt"
 # command to run tests
 script: python py_thread_process_profile.py
+script: python py_threadpool.py
 
