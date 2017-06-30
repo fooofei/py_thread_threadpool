@@ -2,6 +2,7 @@
 import os
 import sys
 import unittest
+import timeit
 import time
 import random
 
@@ -49,33 +50,47 @@ class MyTestCase(unittest.TestCase):
         iterable = [{u'index': i, u'value': v} for i, v in enumerate(iterable)]
 
         print(u'data {}'.format(format_iterable(iterable)))
+        sys.stdout.flush()
 
-        t = time.clock()
+        t = timeit.default_timer()
         r1 = _futures_threadpool_framework(_thread_func_compare_concurrent_multiprocessing
                                            , iterable)
-        t1 = time.clock() - t
+        t1 = timeit.default_timer() - t
 
         print(u'result of futures_threadpool {} {}'.format(t1, format_iterable(r1)))
+        sys.stdout.flush()
 
-        t = time.clock()
+        t = timeit.default_timer()
         r2 = _multiprocessing_threadpool_framework(_thread_func_compare_concurrent_multiprocessing
                                                    , iterable)
-        t2 = time.clock() - t
+        t2 = timeit.default_timer() - t
 
         print(u'result of multiprocess threadpool {} {}'.format(t2, format_iterable(r2)))
+        sys.stdout.flush()
 
-        t = time.clock()
+        t = timeit.default_timer()
         r3 = _futures_threadpool_framework2(_thread_func_compare_concurrent_multiprocessing
                                             , iterable)
-        t3 = time.clock() - t
+        t3 = timeit.default_timer() - t
 
         print(u'result of futures_threadpool2  {} {}'.format(t3, format_iterable(r3)))
+        sys.stdout.flush()
 
         self.assertEqual(int(t1), int(t2))
-        self.assertEqual(int(t1), max((v[u'value'] for v in iterable)))
+        self.assertAlmostEqual(int(t1), max((v[u'value'] for v in iterable)), delta=1)
 
         self.assertEqual(r1, r2)
         self.assertEqual(r1, iterable)
+
+    def test_time(self):
+        delay = 5
+        t1 = timeit.default_timer()
+        time.sleep(delay)
+
+        t2 = timeit.default_timer()
+        t3 = t2 - t1
+
+        self.assertAlmostEqual(int(t3), delay, delta=1)
 
 
 if __name__ == '__main__':
