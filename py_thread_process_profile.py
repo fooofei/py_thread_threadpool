@@ -23,6 +23,7 @@ from multiprocessing import Process
 import unittest
 import random
 import inspect
+import timeit
 
 g_task_count = 8
 curpath = os.path.dirname(os.path.realpath(__file__))
@@ -122,9 +123,9 @@ class Profile(object):
     def execute(self, func, *args, **kwargs):
         times = []
         for _ in range(kwargs.pop('execute_count',1)):
-            t = time.clock()
+            t = timeit.default_timer()
             func(*args,**kwargs)
-            times.append(time.clock()-t)
+            times.append(timeit.default_timer()-t)
 
         import sys
         print('{} {} {}'.format(self._test_method, func.__name__, map(lambda e : '{:.3f}'.format(e),times)))
