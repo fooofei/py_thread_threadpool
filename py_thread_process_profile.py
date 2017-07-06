@@ -136,7 +136,7 @@ class Profile(object):
 
 class MyTestCase(unittest.TestCase):
 
-    def test_profile_line(self):
+    def test_profile_linearly(self):
         t = Profile()
 
         for fn in (_work_much_cpu,_work_much_io,_work_much_net):
